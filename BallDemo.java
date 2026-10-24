@@ -50,6 +50,7 @@ public class BallDemo
     public void boxBounce(int numOfBalls)
     {
         
+        generatedBalls.clear();
         
         numOfBalls = Math.clamp(numOfBalls, 5, 50);
         int iterationsDone = 0;
@@ -87,7 +88,7 @@ public class BallDemo
         }
         
         while (iterationsDone <= 500) {
-            myCanvas.wait(10);           // small delay
+            myCanvas.wait(50);           // small delay
             
             for(BoxBall ball : generatedBalls){
                 ball.move();

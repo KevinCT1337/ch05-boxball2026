@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.geom.*;
+import java.util.Random;
 
 /**
  * Class BoxBall - a graphical ball that moves similar to the ball in PONG.
@@ -18,6 +19,9 @@ import java.awt.geom.*;
  * @author David J. Barnes
  * @author Bruce Quig
  * @author William Crosbie
+ * @author Kevin Cox-Torrelio
+ * 
+ * MODIFIED 10/24/2026
  *
  * @version 2025.10.06
  */
@@ -44,16 +48,20 @@ public class BoxBall
      * @param ballColor  the color of the ball
      * @param box  the bounding box (where the ball will bounce)
      * @param drawingCanvas  the canvas to draw this ball on
+     * @param initialXSpeed the initial horizontal speed of the ball
+     * @param initialYSpeed the initial vertical speed of the ball
      */
     public BoxBall(int xPos, int yPos, int ballDiameter, Color ballColor,
-                        Box box, Canvas drawingCanvas)
+                        Box box, Canvas drawingCanvas, int initialXSpeed, int initialYSpeed)
     {
         xPosition = xPos;
         yPosition = yPos;
         color = ballColor;
         diameter = ballDiameter;
-
+        myBox = box;
         canvas = drawingCanvas;
+        xSpeed = initialXSpeed;
+        ySpeed = initialYSpeed;
     }
 
     /**
@@ -80,12 +88,40 @@ public class BoxBall
     {
         // remove from canvas at the current position
         erase();
-            
+        
+        
         // compute new position
-  
+        yPosition += ySpeed;
+        xPosition += xSpeed;
+
+        
+        // get wall positions
+        int leftWallPos = myBox.getLeftWall();
+        int rightWallPos = myBox.getRightWall();
+        int topWallPos = myBox.getTopWall();
+        int bottomWallPos = myBox.getBottomWall();
+        
+        
         // figure out if it has hit the left or right wall
+        if (xPosition <= (leftWallPos) ) {
+            xPosition = (int)(leftWallPos + diameter);
+            xSpeed = -xSpeed; 
+        }
+        else if (xPosition >= (rightWallPos - diameter -1) ) {
+            xPosition = (int)(rightWallPos - diameter);
+            xSpeed = -xSpeed; 
+        }
+        
         
         // figure out if it has hit the top or bottom wall
+        if (yPosition <= (topWallPos) ) {
+            yPosition = (int)(topWallPos + diameter);
+            ySpeed = -ySpeed; 
+        } else if (yPosition >= (bottomWallPos - diameter -1) ) {
+            yPosition = (int)(bottomWallPos - diameter);
+            ySpeed = -ySpeed; 
+        }
+        
         
         draw();
     }    
